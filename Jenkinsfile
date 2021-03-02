@@ -28,57 +28,73 @@ pipeline {
 
   stages {
     stage('checkout') {
+      steps {
       
-      checkout([$class: 'GitSCM', branches: [['*/develop', '*/feature']], url: gitRepo])
-      
+        checkout([$class: 'GitSCM', branches: [['*/develop', '*/feature']], url: gitRepo])
+
+      }
     }
     stage('build') {
+      steps {
 
-      bat "mvn install"
+        bat "mvn install"
 
+      }
     }
     stage('test') {
+      steps {
 
-      bat "mvn test"
+        bat "mvn test"
 
+      }
     }
     stage('sonar analysis') {
+      steps {
 
-      bat "mvn sonar:sonar -Dtest.sonar.exclusions=**/*test.*"
+        bat "mvn sonar:sonar -Dtest.sonar.exclusions=**/*test.*"
 
+      }
     }
     stage('push to artifactory') {
+      steps {
 
-      rtMavenDeployer(
-        id: 'deployer',
-        snapshotRepo: 'NAGPRepo',
-        releaseRepo: 'NAGPRepo',
-        serverId: '123456789@artifactory'
-      )
-      rtMavenRun(
-        pom: 'pom.xml',
-        goals: 'install',
-        deployerId: 'deployer'
-      )
-      rtPublishBuildInfo (
-        serverId: '123456789@artifactory'
-      )
+        rtMavenDeployer(
+          id: 'deployer',
+          snapshotRepo: 'NAGPRepo',
+          releaseRepo: 'NAGPRepo',
+          serverId: '123456789@artifactory'
+        )
+        rtMavenRun(
+          pom: 'pom.xml',
+          goals: 'install',
+          deployerId: 'deployer'
+        )
+        rtPublishBuildInfo (
+          serverId: '123456789@artifactory'
+        )
 
+      }
     }
     stage('docker build image') {
-  
-      bat "docker build -t varun/JavaCode_${BRANCH_NAME.toLowerCase()}:${BUILD_Number}  Dockerfile ."
+      steps {
 
+        bat "docker build -t varun/JavaCode_${BRANCH_NAME.toLowerCase()}:${BUILD_Number}  Dockerfile ."
+
+      }
     }
     stage('docker stop and remove container') {
+      steps {
 
-      bat "docker ps -aq --filter \"name=varun_JavaCode_${BRANCH_NAME.toLowerCase()}\" | findstr . && docker stop varun_JavaCode_${BRANCH_NAME.toLowerCase()} && docker rm varun_JavaCode_${BRANCH_NAME.toLowerCase()} | echo \"no container found to stop\""
+        bat "docker ps -aq --filter \"name=varun_JavaCode_${BRANCH_NAME.toLowerCase()}\" | findstr . && docker stop varun_JavaCode_${BRANCH_NAME.toLowerCase()} && docker rm varun_JavaCode_${BRANCH_NAME.toLowerCase()} | echo \"no container found to stop\""
 
+      }
     }
     stage('docker start new container') {
+      steps {
 
-      bat "docker run -d --name varun_JavaCode_${BRANCH_NAME.toLowerCase()}"
+        bat "docker run -d --name varun_JavaCode_${BRANCH_NAME.toLowerCase()}"
 
+      }
     }
   }
 }
