@@ -78,7 +78,7 @@ pipeline {
     stage('docker build image') {
       steps {
 
-        bat "docker build -t varun/javacode_${BRANCH_NAME.toLowerCase()}:${BUILD_Number}  Dockerfile ."
+        bat "docker build -t varun/javacode_${BRANCH_NAME.toLowerCase()}:${BUILD_Number} -f Dockerfile ."
 
       }
     }
