@@ -30,7 +30,7 @@ pipeline {
     stage('checkout') {
       steps {
       
-        checkout([$class: 'GitSCM', branches: [['*/develop', '*/feature']], url: gitRepo])
+        checkout([$class: 'GitSCM', branches: [['*/develop', '*/feature']], userRemoteConfigs: [[url: gitRepo]]])
 
       }
     }
