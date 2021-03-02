@@ -92,7 +92,7 @@ pipeline {
     stage('docker start new container') {
       steps {
 
-        bat "docker run -d --name varun_javacode_${BRANCH_NAME.toLowerCase()}"
+        bat "docker run -d -p ${PORT}:8080 --name varun_javacode_${BRANCH_NAME.toLowerCase()} varun/javacode_${BRANCH_NAME.toLowerCase()}:${BUILD_Number}"
 
       }
     }
