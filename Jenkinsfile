@@ -85,7 +85,7 @@ pipeline {
     stage('docker stop and remove container') {
       steps {
 
-        bat "docker ps -aq --filter \"name=varun_javacode_${BRANCH_NAME.toLowerCase()}\" | findstr . && docker stop varun_javacode_${BRANCH_NAME.toLowerCase()} && docker rm varun_javacode_${BRANCH_NAME.toLowerCase()} | echo \"no container found to stop\""
+        bat "docker ps -aq --filter \"name=varun_javacode_${BRANCH_NAME.toLowerCase()}\" | (findstr . && docker stop varun_javacode_${BRANCH_NAME.toLowerCase()} && docker rm varun_javacode_${BRANCH_NAME.toLowerCase()}) || echo \"no container found to stop\""
 
       }
     }
