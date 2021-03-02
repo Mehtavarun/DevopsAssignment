@@ -78,21 +78,21 @@ pipeline {
     stage('docker build image') {
       steps {
 
-        bat "docker build -t varun/JavaCode_${BRANCH_NAME.toLowerCase()}:${BUILD_Number}  Dockerfile ."
+        bat "docker build -t varun/javacode_${BRANCH_NAME.toLowerCase()}:${BUILD_Number}  Dockerfile ."
 
       }
     }
     stage('docker stop and remove container') {
       steps {
 
-        bat "docker ps -aq --filter \"name=varun_JavaCode_${BRANCH_NAME.toLowerCase()}\" | findstr . && docker stop varun_JavaCode_${BRANCH_NAME.toLowerCase()} && docker rm varun_JavaCode_${BRANCH_NAME.toLowerCase()} | echo \"no container found to stop\""
+        bat "docker ps -aq --filter \"name=varun_javacode_${BRANCH_NAME.toLowerCase()}\" | findstr . && docker stop varun_javacode_${BRANCH_NAME.toLowerCase()} && docker rm varun_javacode_${BRANCH_NAME.toLowerCase()} | echo \"no container found to stop\""
 
       }
     }
     stage('docker start new container') {
       steps {
 
-        bat "docker run -d --name varun_JavaCode_${BRANCH_NAME.toLowerCase()}"
+        bat "docker run -d --name varun_javacode_${BRANCH_NAME.toLowerCase()}"
 
       }
     }
